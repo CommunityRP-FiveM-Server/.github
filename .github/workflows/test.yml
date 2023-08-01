@@ -4,6 +4,10 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 
 on:
   workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
 
 jobs:
   Explore-GitHub-Actions:
