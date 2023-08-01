@@ -2,9 +2,6 @@ name: Add issue or pull request to project board TEST TEST TEST
 
 on:
   workflow_call:
-    secrets:
-      MY_GITHUB_TOKEN:
-        required: true
 
 jobs:
   add-to-project:
