@@ -1,4 +1,4 @@
-name: Add issue or pull request to project board TEST
+name: Add issue or pull request to project board TEST CHECK TEST
 
 on:
   issues:
