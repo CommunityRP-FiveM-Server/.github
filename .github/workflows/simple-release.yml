@@ -2,7 +2,13 @@ name: Simple Release GitHub Actions
 
 on:
   workflow_call:
-
+    inputs:
+        excludeOptions:
+          type: string
+          required: false
+        zipName:
+          type: string
+          required: true
 jobs:
   create-release:
     name: Build and Create Tagged release
@@ -42,10 +48,17 @@ jobs:
         with:
           tag-name: ${{ github.ref_name }}
 
+      - name: Create exclude file from input
+        run: |
+          IFS=',' read -ra ADDR <<< "${{ github.event.inputs.excludeOptions }}"
+          for i in "${ADDR[@]}"; do
+            echo "$i" >> exclude.txt
+          done
+          
       - name: Bundle files
         run: |
           mkdir -p ./temp/esx_core
-          rsync -av --progress ./ ./temp/esx_core/ --exclude temp --exclude .git --exclude .github
+          rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt ./ ./temp/esx_core/
           cd ./temp && zip -r ../esx_core.zip ./esx_core
           
       - name: Create Release
