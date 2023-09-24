@@ -1,9 +1,7 @@
 name: Simple Release GitHub Actions
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  workflow_call:
 
 jobs:
   create-release:
