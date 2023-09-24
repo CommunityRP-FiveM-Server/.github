@@ -58,8 +58,14 @@ jobs:
       - name: Bundle files
         run: |
           mkdir -p ./temp/${{ inputs.zipName }}
-          rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt ./ ./temp/${{ inputs.zipName }}/
-          cd ./temp && zip -r ../${{ inputs.zipName }} ./esx_core/
+          
+          if [[ -f exclude.txt ]]; then
+            rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt ./ ./temp/${{ inputs.zipName }}/
+          else
+            rsync -av --progress --exclude=temp/ ./ ./temp/${{ inputs.zipName }}/
+          fi
+          
+          cd ./temp && zip -r ../${{ inputs.zipName }} ./${{ inputs.zipName }}/
           
       - name: Create Release
         uses: 'marvinpinto/action-automatic-releases@v1.2.1'
