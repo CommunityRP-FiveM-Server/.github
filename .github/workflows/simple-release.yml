@@ -64,7 +64,7 @@ jobs:
           if [[ -f exclude.txt ]]; then
             rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt --exclude=exclude.txt ./ ./temp/${{ inputs.zipName }}/
           else
-            rsync -av --progress --exclude=temp/ ./ ./temp/${{ inputs.zipName }}/
+            rsync -av --progress --exclude=temp/ --exclude .git --exclude .github ./ ./temp/${{ inputs.zipName }}/
           fi
           
           cd ./temp && zip -r ../${{ inputs.zipName }} ./${{ inputs.zipName }}/
