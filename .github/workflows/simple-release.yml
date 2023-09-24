@@ -74,7 +74,7 @@ jobs:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           title: '${{ env.RELEASE_VERSION }}'
           prerelease: false
-          files: '${{ inputs.zipName }}'
+          files: ${{ inputs.zipName }}.zip
 
         env:
           CI: false
