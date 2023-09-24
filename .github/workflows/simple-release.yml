@@ -22,8 +22,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 17
-          cache: 'npm'
-          cache-dependency-path: web/package-lock.json
 
       - name: Bump manifest version
         run: node .github/actions/bump-manifest-version.js
