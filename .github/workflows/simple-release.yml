@@ -30,7 +30,7 @@ jobs:
         run: mkdir -p .github/actions/
         
       - name: Download bump-manifest-version.js
-        run: curl -f -o .github/actions/bump-manifest-version.js https://github.com/CommunityRP-FiveM-Server/.github/blob/961b50cd10fdda968a7a8a4b78af5fd2447cf650/.github/actions/bump-manifest-version.js
+        run: curl -f -o .github/actions/bump-manifest-version.js https://github.com/CommunityRP-FiveM-Server/.github/raw/961b50cd10fdda968a7a8a4b78af5fd2447cf650/.github/actions/bump-manifest-version.js
 
       - name: Print the content of bump-manifest-version.js
         run: cat .github/actions/bump-manifest-version.js
