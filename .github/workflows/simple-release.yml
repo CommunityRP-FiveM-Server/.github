@@ -50,16 +50,16 @@ jobs:
 
       - name: Create exclude file from input
         run: |
-          IFS=',' read -ra ADDR <<< "${{ github.event.inputs.excludeOptions }}"
+          IFS=',' read -ra ADDR <<< "${{ inputs.excludeOptions }}"
           for i in "${ADDR[@]}"; do
             echo "$i" >> exclude.txt
           done
           
       - name: Bundle files
         run: |
-          mkdir -p ./temp/esx_core
-          rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt ./ ./temp/esx_core/
-          cd ./temp && zip -r ../esx_core.zip ./esx_core
+          mkdir -p ./temp/${{ inputs.zipName }}
+          rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt ./ ./temp/${{ inputs.zipName }}/
+          cd ./temp && zip -r ../${{ inputs.zipName }} ./esx_core/
           
       - name: Create Release
         uses: 'marvinpinto/action-automatic-releases@v1.2.1'
@@ -68,7 +68,7 @@ jobs:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
           title: '${{ env.RELEASE_VERSION }}'
           prerelease: false
-          files: esx_core.zip
+          files: '${{ inputs.zipName }}'
 
         env:
           CI: false
