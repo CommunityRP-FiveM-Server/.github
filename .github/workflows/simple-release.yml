@@ -24,7 +24,7 @@ jobs:
           node-version: 17
 
       - name: Bump manifest version
-        run: node $GITHUB_WORKSPACE/.github/actions/bump-manifest-version.js
+        run: node $GITHUB_WORKSPACE
         env:
           TGT_RELEASE_VERSION: ${{ github.ref_name }}
 
