@@ -24,7 +24,7 @@ jobs:
           node-version: 17
 
       - name: Bump manifest version
-        run: node .github/actions/bump-manifest-version.js
+        run: node CommunityRP-FiveM-Server/.github/.github/actions/bump-manifest-version.js
         env:
           TGT_RELEASE_VERSION: ${{ github.ref_name }}
 
