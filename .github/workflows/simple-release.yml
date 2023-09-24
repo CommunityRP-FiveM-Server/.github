@@ -57,7 +57,7 @@ jobs:
       - name: Bundle files
         run: |
           mkdir -p ./temp/esx_core
-          rsync -av --progress ./ ./temp/esx_core/ --exclude temp
+          rsync -av --progress ./ ./temp/esx_core/ --exclude temp --exclude .git --exclude .github
           cd ./temp && zip -r ../esx_core.zip ./esx_core
           
       - name: Create Release
