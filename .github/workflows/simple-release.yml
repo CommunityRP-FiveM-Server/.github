@@ -30,7 +30,7 @@ jobs:
         run: curl -o .github/actions/bump-manifest-version.js https://github.com/CommunityRP-FiveM-Server/.github/blob/961b50cd10fdda968a7a8a4b78af5fd2447cf650/.github/actions/bump-manifest-version.js
         
       - name: Bump manifest version
-        run: node $GITHUB_WORKSPACE
+        run: node .github/actions/bump-manifest-version.js
         env:
           TGT_RELEASE_VERSION: ${{ github.ref_name }}
 
