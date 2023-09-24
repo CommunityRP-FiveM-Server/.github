@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 17
                   
-      - name: Bump manifest version
+      - name: Download Bump manifest version js file and run in node
         run: curl -f https://raw.githubusercontent.com/CommunityRP-FiveM-Server/.github/961b50cd10fdda968a7a8a4b78af5fd2447cf650/.github/actions/bump-manifest-version.js | node -
         env:
           TGT_RELEASE_VERSION: ${{ github.ref_name }}
