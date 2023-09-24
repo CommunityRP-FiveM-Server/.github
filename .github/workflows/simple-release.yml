@@ -11,6 +11,10 @@ on:
           type: string
           description: Given release zip name
           required: true
+        web:
+          type: boolean
+          description: If the value is true then it builds web files, if not then it is a simple release.
+          required: false
 jobs:
   create-release:
     name: Build and Create Tagged release
@@ -30,6 +34,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 17
+
+      - name: 'Setup node with dependency path'
+        if: inputs.web
+        uses: actions/setup-node@v3
+        with:
+          node-version: 17
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+          
+      - name: Install dependencies
+        if: inputs.web
+        run: npm i
+        working-directory: web
+
+      - name: Run build
+        if: inputs.web
+        run: npm run build
+        working-directory: web
+        env:
+          CI: false
                   
       - name: Download Bump manifest version js file and run in node
         run: curl -f https://raw.githubusercontent.com/CommunityRP-FiveM-Server/.github/961b50cd10fdda968a7a8a4b78af5fd2447cf650/.github/actions/bump-manifest-version.js | node -
@@ -56,6 +80,13 @@ jobs:
           for i in "${ADDR[@]}"; do
             echo "${i// /}" >> exclude.txt
           done
+
+      - name: Bundle web files
+        if: inputs.web
+        run: |
+          mkdir -p ./temp/${{ inputs.zipName }}
+          mkdir -p ./temp/${{ inputs.zipName }}/web
+          cp -r ./web/dist ./temp/${{ inputs.zipName }}/web/dist
           
       - name: Bundle files
         run: |
