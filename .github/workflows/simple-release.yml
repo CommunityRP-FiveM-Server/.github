@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: 17
 
+      - name: Print GITHUB_WORKSPACE
+        run: echo $GITHUB_WORKSPACE
+        
       - name: Bump manifest version
         run: node $GITHUB_WORKSPACE
         env:
