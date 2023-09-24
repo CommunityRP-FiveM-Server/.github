@@ -50,9 +50,9 @@ jobs:
 
       - name: Create exclude file from input
         run: |
-          IFS=',' read -ra ADDR <<< "${{ inputs.excludeOptions }}"
+         IFS=',' read -ra ADDR <<< "${{ inputs.excludeOptions }}"
           for i in "${ADDR[@]}"; do
-            echo "$i" >> exclude.txt
+            echo "${i// /}" >> exclude.txt
           done
           
       - name: Bundle files
@@ -60,7 +60,7 @@ jobs:
           mkdir -p ./temp/${{ inputs.zipName }}
           
           if [[ -f exclude.txt ]]; then
-            rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt ./ ./temp/${{ inputs.zipName }}/
+            rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt --exclude=exclude.txt ./ ./temp/${{ inputs.zipName }}/
           else
             rsync -av --progress --exclude=temp/ ./ ./temp/${{ inputs.zipName }}/
           fi
