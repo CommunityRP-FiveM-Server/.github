@@ -12,7 +12,7 @@ on:
           description: Given release zip name
           required: true
         web:
-          type: boolean
+          type: string
           description: If the value is true then it builds web files, if not then it is a simple release.
           required: false
         versionNumber:
@@ -25,6 +25,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Convert 'web' input to boolean and set as env var
+        run: |
+          if [ "${{ inputs.web }}" = "true" ]; then
+            echo "WEB=true" >> $GITHUB_ENV
+          else
+            echo "WEB=false" >> $GITHUB_ENV
+          fi
       - name: Install archive tools
         run: sudo apt install zip
 
@@ -40,7 +47,7 @@ jobs:
           node-version: 17
 
       - name: Setup node with dependency path
-        if: inputs.web
+        if: ${{ env.WEB }}
         uses: actions/setup-node@v3
         with:
           node-version: 17
@@ -48,12 +55,12 @@ jobs:
           cache-dependency-path: web/package-lock.json
           
       - name: Install dependencies
-        if: inputs.web
+        if: ${{ env.WEB }}
         run: npm i
         working-directory: web
 
       - name: Run build
-        if: inputs.web
+        if: ${{ env.WEB }}
         run: npm run build
         working-directory: web
         env:
@@ -108,7 +115,7 @@ jobs:
           done
 
       - name: Bundle web files
-        if: inputs.web
+        if: ${{ env.WEB }}
         run: |
           mkdir -p ./temp/${{ inputs.zipName }}
           mkdir -p ./temp/${{ inputs.zipName }}/web
