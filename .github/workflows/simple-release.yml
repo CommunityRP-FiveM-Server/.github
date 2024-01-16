@@ -30,7 +30,7 @@ jobs:
           if [ "${{ inputs.web }}" = "true" ]; then
             echo "WEB=true" >> $GITHUB_ENV
           else
-            echo "WEB=false" >> $GITHUB_ENV
+            echo "WEB=" >> $GITHUB_ENV
           fi
       - name: Install archive tools
         run: sudo apt install zip
