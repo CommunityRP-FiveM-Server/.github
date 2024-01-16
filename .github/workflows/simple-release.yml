@@ -129,6 +129,7 @@ jobs:
         id: auto_release
         with:
           repo_token: '${{ secrets.GITHUB_TOKEN }}'
+          automatic_release_tag: ${{ steps.semvers.outputs.patch }}
           prerelease: false
           files: ${{ inputs.zipName }}.zip
 
