@@ -38,6 +38,7 @@ jobs:
         run: node script.js do
         
       - name: Install stylua and check format
+        id: check-lua-code-format
         if: ${{ inputs.any-changed-files-list == 'true' }}
         uses: JohnnyMorganz/stylua-action@v3
         with:
@@ -47,12 +48,12 @@ jobs:
         continue-on-error: true
 
       - name: Run formatter
-        if: ${{ inputs.any-changed-files-list == 'true' && failure() }}
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         uses: JohnnyMorganz/stylua-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: v0.19.1
-          args: --verify ${{ inputs.all-changed-files-list }}
+          args: -- ${{ inputs.all-changed-files-list }}
 
       - name: Run undo script
         if: ${{ inputs.any-changed-files-list == 'true' }}
