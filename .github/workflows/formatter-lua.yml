@@ -96,4 +96,5 @@ jobs:
           commit_message: ${{ steps.commit-message-step.outputs.commit_message }}
           file_pattern: '*.lua'
           status_options: '--untracked-files=no'
+          skip_fetch: false
         
