@@ -67,17 +67,18 @@ jobs:
           echo "package-lock.json" >> .gitignore   
 
       - name: Generate formatted files list
-        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         id: generate-formatted-list
+        if: ${{ inputs.any-changed-files-list == 'true' }}
         run: |
-          import os
-          files = '${{ inputs.all-changed-files-list }}'.split()
-          formatted_files = [f":art: formatted {file}" for file in files]
-          formatted_files_str = '\n'.join(formatted_files)
-          with open(os.getenv('GITHUB_ENV'), 'a') as f:
-            f.write(f"FORMATTED_FILES_LIST={formatted_files_str}\n")
-        shell: python
+          echo "${{ inputs.all-changed-files-list }}" | tr ' ' '\n' | sed 's/^/:art: formatted /' > commitmessage.txt
 
+      - name: Set commit message
+        id: commit-message-step
+        run: |
+          echo 'commit_message<<EOF' >> $GITHUB_OUTPUT
+          cat commitmessage.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+      
       - name: Update repo before push
         if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         run: |
@@ -89,7 +90,7 @@ jobs:
         with:
           commit_user_name: ESX GITHUB ACTIONS BOT
           commit_user_email: esx-github-actions-bot@users.noreply.github.com
-          commit_message: ${{ env.FORMATTED_FILES_LIST }}
+          commit_message: ${{ steps.commit-message-step.outputs.commit_message }}
           file_pattern: '*.lua'
           status_options: '--untracked-files=no'
         
