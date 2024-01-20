@@ -2,7 +2,13 @@ name: Code formatter web files with prettier
 
 on:
   workflow_call:
-  
+    inputs:
+      all-changed-files-list:
+        required: true
+        type: string
+      any-changed-files-list:
+        required: true
+        type: string
 jobs:
   formatter:
     runs-on: ubuntu-latest
