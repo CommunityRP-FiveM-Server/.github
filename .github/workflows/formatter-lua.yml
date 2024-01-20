@@ -37,13 +37,22 @@ jobs:
         if: ${{ inputs.any-changed-files-list == 'true' }}
         run: node script.js do
         
-      - name: Install stylua and run formatter
+      - name: Install stylua and check format
         if: ${{ inputs.any-changed-files-list == 'true' }}
         uses: JohnnyMorganz/stylua-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: v0.19.1
-          args: -- ${{ inputs.all-changed-files-list }}
+          args: --check ${{ inputs.all-changed-files-list }}
+        continue-on-error: true
+
+      - name: Run formatter
+        if: ${{ inputs.any-changed-files-list == 'true' && failure() }}
+        uses: JohnnyMorganz/stylua-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: v0.19.1
+          args: --verify ${{ inputs.all-changed-files-list }}
 
       - name: Run undo script
         if: ${{ inputs.any-changed-files-list == 'true' }}
