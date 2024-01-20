@@ -60,22 +60,24 @@ jobs:
         run: node script.js undo
 
       - name: Create or Update .gitignore
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         run: |
           echo "node_modules/" >> .gitignore
           echo "package.json" >> .gitignore
           echo "package-lock.json" >> .gitignore   
 
       - name: Update repo before push
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         run: |
           git pull
           
       - name: Commit changes and push current branch
-        if: ${{ inputs.any-changed-files-list == 'true' }}
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_user_name: ESX GITHUB ACTIONS BOT
           commit_user_email: esx-github-actions-bot@users.noreply.github.com
-          commit_message: :art:Code formatted in *.lua files
+          commit_message: ${{ inputs.all-changed-files-list }}
           file_pattern: '*.lua'
           status_options: '--untracked-files=no'
         
