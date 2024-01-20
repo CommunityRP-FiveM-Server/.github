@@ -70,7 +70,8 @@ jobs:
         id: generate-formatted-list
         if: ${{ inputs.any-changed-files-list == 'true' }}
         run: |
-          echo "${{ inputs.all-changed-files-list }}" | tr ' ' '\n' | sed 's/^/:art: formatted /' > commitmessage.txt
+          echo ":art: Code formatted" >> commitmessage.txt
+          echo "${{ inputs.all-changed-files-list }}" | tr ' ' '\n' | sed 's/^/Formatted file:  /' > commitmessage.txt
 
       - name: Set commit message
         id: commit-message-step
