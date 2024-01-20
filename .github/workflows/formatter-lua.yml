@@ -67,11 +67,16 @@ jobs:
           echo "package-lock.json" >> .gitignore   
 
       - name: Generate formatted files list
-        id: generate-formatted-list
         if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
+        id: generate-formatted-list
         run: |
-          FORMATTED_FILES_LIST=$(echo "${{ inputs.all-changed-files-list }}" | tr ' ' '\n' | sed 's/^/:art: formatted /')
-          echo "::set-output name=formatted_files::$FORMATTED_FILES_LIST"
+          import os
+          files = '${{ inputs.all-changed-files-list }}'.split()
+          formatted_files = [f":art: formatted {file}" for file in files]
+          formatted_files_str = '\n'.join(formatted_files)
+          with open(os.getenv('GITHUB_ENV'), 'a') as f:
+            f.write(f"FORMATTED_FILES_LIST={formatted_files_str}\n")
+        shell: python
 
       - name: Update repo before push
         if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
@@ -84,7 +89,7 @@ jobs:
         with:
           commit_user_name: ESX GITHUB ACTIONS BOT
           commit_user_email: esx-github-actions-bot@users.noreply.github.com
-          commit_message: ${{ steps.generate-formatted-list.outputs.formatted_files }}
+          commit_message: ${{ env.FORMATTED_FILES_LIST }}
           file_pattern: '*.lua'
           status_options: '--untracked-files=no'
         
