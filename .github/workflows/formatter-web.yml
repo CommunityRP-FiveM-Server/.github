@@ -41,6 +41,12 @@ jobs:
         run: | 
             npm install --save-dev prettier && npx prettier --write ${{ inputs.all-changed-files-list }}
 
+      - name: Create or Update .gitignore
+        run: |
+          echo "node_modules/" >> .gitignore
+          echo "package.json" >> .gitignore
+          echo "package-lock.json" >> .gitignore   
+
       - name: Update repo before push
         run: |
           git pull
