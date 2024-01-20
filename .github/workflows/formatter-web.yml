@@ -40,4 +40,18 @@ jobs:
         if: ${{ inputs.any-changed-files-list == 'true' }}
         run: | 
             npm install --save-dev prettier && npx prettier --write ${{ inputs.all-changed-files-list }}
+
+      - name: Update repo before push
+        run: |
+          git pull
+          
+      - name: Commit changed files and push current branch
+        if: ${{ inputs.any-changed-files-list == 'true' }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_user_name: ESX GITHUB ACTIONS BOT
+          commit_user_email: esx-github-actions-bot@users.noreply.github.com
+          commit_message: :art:Code formatted in ${{ env.CHANGED_EXTENSIONS }} files
+          file_pattern: ${{ env.CHANGED_EXTENSIONS }}
+          status_options: '--untracked-files=no'
             
