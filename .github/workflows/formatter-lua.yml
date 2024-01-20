@@ -24,18 +24,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16"
-      - name: Get changed files
-        id: changed-files-lua
-        uses: tj-actions/changed-files@v37
-        with:
-          files: |
-            **/*.lua
-            !**/*.yml
-      - name: List all changed files
-        run: |
-          for file in ${{ steps.changed-files-lua.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
           
       - name: Download and save the script
         if: ${{ inputs.any-changed-files-list == 'true' }}
@@ -60,19 +48,3 @@ jobs:
       - name: Run undo script
         if: ${{ inputs.any-changed-files-list == 'true' }}
         run: node script.js undo
-
-      - name: Create or Update .gitignore
-        run: |
-          echo "node_modules/" >> .gitignore
-          echo "package.json" >> .gitignore
-          echo "package-lock.json" >> .gitignore
-          
-      - name: Commit changes and push current branch
-        if: ${{ inputs.any-changed-files-list == 'true' }}
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_user_name: ESX GITHUB ACTIONS BOT
-          commit_user_email: esx-github-actions-bot@users.noreply.github.com
-          commit_message: :art:Code formatted in *.lua files
-          file_pattern: '*.lua'
-          status_options: '--untracked-files=no'
