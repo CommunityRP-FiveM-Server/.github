@@ -70,7 +70,7 @@ jobs:
         id: generate-formatted-list
         if: ${{ inputs.any-changed-files-list == 'true' && steps.check-lua-code-format.outcome == 'failure' }}
         run: |
-          echo -e ":art: Code formatted\n$(
+          echo -e ":art: Lua code formatted\n$(
             echo "${{ inputs.all-changed-files-list }}" | tr ' ' '\n' | sed 's/^/Formatted file:  /'
           )" > commitmessage.txt
 
