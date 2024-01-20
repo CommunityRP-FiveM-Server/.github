@@ -90,4 +90,5 @@ jobs:
           commit_message: ${{ steps.commit-message-step.outputs.commit_message }}
           file_pattern: ${{ env.CHANGED_EXTENSIONS }}
           status_options: '--untracked-files=no'
+          skip_fetch: false    
             
