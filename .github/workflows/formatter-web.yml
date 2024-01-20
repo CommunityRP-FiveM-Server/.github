@@ -35,29 +35,59 @@ jobs:
           with open(os.getenv('GITHUB_ENV'), 'a') as f:
             f.write(f"CHANGED_EXTENSIONS={' '.join(extensions)}\n")
         shell: python
-        
-      - name: Format changed files with Prettier
+
+      - name: Install Prettier
         if: ${{ inputs.any-changed-files-list == 'true' }}
         run: | 
-            npm install --save-dev prettier && npx prettier --write ${{ inputs.all-changed-files-list }}
+            npm install --save-dev prettier
+
+      - name: Check prettier code format
+        id: check-prettier-format
+        if: ${{ inputs.any-changed-files-list == 'true' }}
+        run: | 
+            npx prettier --check ${{ inputs.all-changed-files-list }}
+        continue-on-error: true
+            
+      - name: Format changed files with Prettier
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-prettier-format.outcome == 'failure' }}
+        run: | 
+            npx prettier --write ${{ inputs.all-changed-files-list }}
+
+      - name: Generate formatted files list
+        id: generate-formatted-list
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-prettier-format.outcome == 'failure' }}
+        run: |
+          echo -e ":art: Code formatted\n$(
+            echo "${{ inputs.all-changed-files-list }}" | tr ' ' '\n' | sed 's/^/Formatted file:  /'
+          )" > commitmessage.txt
+
+      - name: Set commit message
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-prettier-format.outcome == 'failure' }}
+        id: commit-message-step
+        run: |
+          echo 'commit_message<<EOF' >> $GITHUB_OUTPUT
+          cat commitmessage.txt >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: Create or Update .gitignore
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-prettier-format.outcome == 'failure' }}
         run: |
           echo "node_modules/" >> .gitignore
           echo "package.json" >> .gitignore
           echo "package-lock.json" >> .gitignore   
 
       - name: Update repo before push
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-prettier-format.outcome == 'failure' }}
         run: |
           git pull
           
       - name: Commit changed files and push current branch
-        if: ${{ inputs.any-changed-files-list == 'true' }}
+        if: ${{ inputs.any-changed-files-list == 'true' && steps.check-prettier-format.outcome == 'failure' }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_user_name: ESX GITHUB ACTIONS BOT
           commit_user_email: esx-github-actions-bot@users.noreply.github.com
-          commit_message: :art:Code formatted in ${{ env.CHANGED_EXTENSIONS }} files
+          commit_message: ${{ steps.commit-message-step.outputs.commit_message }}
           file_pattern: ${{ env.CHANGED_EXTENSIONS }}
           status_options: '--untracked-files=no'
             
