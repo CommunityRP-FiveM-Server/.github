@@ -1,6 +1,6 @@
 name: Sync labels
 on:
-  workflow_dispatch:
+  workflow_call:
 
 permissions:
   issues: write
