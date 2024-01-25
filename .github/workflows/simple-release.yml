@@ -44,13 +44,13 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 17
+          node-version: 20
 
       - name: Setup node with dependency path
         if: ${{ env.WEB }}
         uses: actions/setup-node@v3
         with:
-          node-version: 17
+          node-version: 20
           cache: 'npm'
           cache-dependency-path: web/package-lock.json
           
@@ -111,7 +111,7 @@ jobs:
       - name: Update tag ref
         uses: EndBug/latest-tag@latest
         with:
-          tag-name: ${{ env.DETERMINED_VERSION }}
+          ref: ${{ env.DETERMINED_VERSION }}
 
       - name: Create exclude file from input
         run: |
