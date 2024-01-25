@@ -6,7 +6,7 @@ const version = process.env.TGT_RELEASE_VERSION;
 const newVersion = version.replace("v", "");
 const defaultFolderPath = process.env.GITHUB_WORKSPACE;
 const targetFile = 'fxmanifest.lua';
-let allResults = [];
+const allResults = [];
 
 const replaceInFiles = (folderPath) => {
   fs.readdir(folderPath, { withFileTypes: true }, (err, entries) => {
@@ -48,7 +48,7 @@ process.on('exit', () => {
   const changedFiles = allResults.map(result => result.file);
 
   if (changedFiles.length > 0) {
-    console.log(`echo "modified_files=${JSON.stringify(changedFiles)}" >> $GITHUB_ENV`);
+    console.log(`echo "FXMANIFEST_FILE_CHANGES=${JSON.stringify(changedFiles)}" >> $GITHUB_ENV`);
   } else {
     console.log('No changes!');
   }
