@@ -2,14 +2,13 @@ const fs = require("fs");
 const path = require('path');
 const replace = require('replace-in-file');
 
-
 const version = process.env.TGT_RELEASE_VERSION;
 const newVersion = version.replace("v", "");
-const defaultFolderPath = process.env.GITHUB_WORKSPACE
+const defaultFolderPath = process.env.GITHUB_WORKSPACE;
 const targetFile = 'fxmanifest.lua';
-let allResults = []
+let allResults = [];
 
-function replaceInFiles(folderPath) {
+const replaceInFiles = (folderPath) => {
   fs.readdir(folderPath, { withFileTypes: true }, (err, entries) => {
     if (err) {
       console.error(err);
@@ -41,18 +40,16 @@ function replaceInFiles(folderPath) {
       }
     });
   });
-}
+};
 
-replaceInFiles(defaultFolderPath)
+replaceInFiles(defaultFolderPath);
 
 process.on('exit', () => {
-
   const changedFiles = allResults.map(result => result.file);
 
   if (changedFiles.length > 0) {
-    console.log('::set-output name=modified_files::' + JSON.stringify(changedFiles));
+    console.log(`echo "modified_files=${JSON.stringify(changedFiles)}" >> $GITHUB_ENV`);
   } else {
     console.log('No changes!');
   }
 });
-
