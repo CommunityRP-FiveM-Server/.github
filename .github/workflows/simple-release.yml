@@ -10,7 +10,7 @@ on:
         zipName:
           type: string
           description: Given release zip name
-          default: ${{ github.repository || 'esx_core' }}
+          default: 'esx_core'
           required: true
         web:
           type: string
