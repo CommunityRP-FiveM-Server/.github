@@ -90,7 +90,7 @@ jobs:
             echo "DETERMINED_VERSION=${{ steps.semvers.outputs.patch }}" >> $GITHUB_ENV
           fi
       - name: Install replacer lib
-        run: npm i -g replace-in-file
+        run: npm i replace-in-file
         
       - name: 'Download Bump manifest version js file and run in node'
         id: replace_script
