@@ -108,6 +108,7 @@ jobs:
           author_name: Manifest Bumper
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
           message: 'chore: bump manifest version to ${{ env.DETERMINED_VERSION }}'
+          new_branch: new-release-${{ env.DETERMINED_VERSION }}
 
       - name: Update tag ref
         uses: EndBug/latest-tag@latest
