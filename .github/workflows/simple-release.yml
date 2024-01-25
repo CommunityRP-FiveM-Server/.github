@@ -89,14 +89,18 @@ jobs:
           else
             echo "DETERMINED_VERSION=${{ steps.semvers.outputs.patch }}" >> $GITHUB_ENV
           fi
+      - name: Install replacer lib
+        run: npm i -g replace-in-file
+        
       - name: 'Download Bump manifest version js file and run in node'
+        id: replace_script
         run: curl -f https://raw.githubusercontent.com/CommunityRP-FiveM-Server/.github/961b50cd10fdda968a7a8a4b78af5fd2447cf650/.github/actions/bump-manifest-version.js | node -
         env:
           TGT_RELEASE_VERSION: ${{ env.DETERMINED_VERSION }}
       - name: Push manifest change
         uses: EndBug/add-and-commit@v8
         with:
-          add: fxmanifest.lua
+          add: ${{ steps.replace_script.outputs.modified_files }}
           push: true
           author_name: Manifest Bumper
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
