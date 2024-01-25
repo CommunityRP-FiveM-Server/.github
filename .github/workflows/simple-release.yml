@@ -94,7 +94,9 @@ jobs:
         
       - name: 'Download Bump manifest version js file and run in node'
         id: replace_script
-        run: curl -f https://raw.githubusercontent.com/CommunityRP-FiveM-Server/.github/main/.github/actions/bump-manifest-version.js | node -
+        run: |
+          curl -f https://raw.githubusercontent.com/CommunityRP-FiveM-Server/.github/main/.github/actions/bump-manifest-version.js | node - > set_env.sh
+          bash set_env.sh
         env:
           TGT_RELEASE_VERSION: ${{ env.DETERMINED_VERSION }}
       - name: Push manifest change
