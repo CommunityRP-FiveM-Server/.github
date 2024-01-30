@@ -13,8 +13,9 @@ const replaceInFiles = (folderPath) => {
 
   entries.forEach(entry => {
     const entryPath = path.join(folderPath, entry.name);
-    
+      console.log(entryPath)
     if (entry.isDirectory()) {
+      console.log("replace", entryPath)
       replaceInFiles(entryPath);
     } else if (entry.isFile() && entry.name === targetFile) {
       const options = {
