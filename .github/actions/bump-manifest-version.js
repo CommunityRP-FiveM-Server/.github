@@ -38,10 +38,16 @@ const replaceInFiles = (folderPath) => {
   });
 };
 
-replaceInFiles(defaultFolderPath);
+//replaceInFiles(defaultFolderPath);
+
+const results = replace.sync({
+    files: `${defaultFolderPath}/**/${targetFile}`,
+    from: /\bversion\s+(.*)$/gm,
+    to: `version '${newVersion}'`,
+});
 
 process.on('exit', () => {
-  const changedFiles = allResults.map(result => result.file);
+  const changedFiles = results.map(result => result.file);
   console.log(changedFiles);
   console.log(defaultFolderPath);
   if (changedFiles.length > 0) {
