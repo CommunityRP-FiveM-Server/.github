@@ -41,7 +41,7 @@ const replaceInFiles = (folderPath) => {
 //replaceInFiles(defaultFolderPath);
 
 const results = replace.sync({
-    files: `${defaultFolderPath}/**/${targetFile}`,
+    files: "./**/fxmanifest.lua",
     from: /\bversion\s+(.*)$/gm,
     to: `version '${newVersion}'`,
 });
