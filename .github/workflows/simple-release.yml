@@ -122,7 +122,7 @@ jobs:
       - name: Push manifest change
         uses: EndBug/add-and-commit@v8
         with:
-          add: ${{ env.FXMANIFEST_FILE_CHANGES }}
+          add: '**/fxmanifest.lua'
           push: true
           author_name: Manifest Bumper
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
