@@ -8,8 +8,8 @@ const defaultFolderPath = process.env.GITHUB_WORKSPACE;
 const targetFile = 'fxmanifest.lua';
 const allResults = [];
 
-const removeBrackets = (name) => {
-  return name.replace(/[\[\]]/g, '');
+const containsBrackets = (name) => {
+  return name.includes('[') && name.includes(']');
 };
 
 const replaceInFiles = (folderPath) => {
@@ -20,12 +20,11 @@ const replaceInFiles = (folderPath) => {
     }
 
     entries.forEach(entry => {
-      const cleanedName = removeBrackets(entry.name);
-      const entryPath = path.join(folderPath, cleanedName);
+      const entryPath = path.join(folderPath, entry.name);
       
-      if (entry.isDirectory()) {
+      if (entry.isDirectory() && containsBrackets(entry.name)) {
         replaceInFiles(entryPath);
-      } else if (entry.isFile() && cleanedName === targetFile) {
+      } else if (entry.isFile() && entry.name === targetFile) {
         const options = {
           files: entryPath,
           from: /\bversion\s+(.*)$/gm,
