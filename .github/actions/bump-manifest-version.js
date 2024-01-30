@@ -49,10 +49,10 @@ const results = replace.sync({
 process.on('exit', () => {
   const changedFiles = results.map(result => result.file);
   console.log(changedFiles);
-  console.log(defaultFolderPath);
-  if (changedFiles.length > 0) {
-    console.log(`echo "FXMANIFEST_FILE_CHANGES=${JSON.stringify(changedFiles)}" >> $GITHUB_ENV`);
-  } else {
-    console.log('No changes!');
-  }
+  //console.log(defaultFolderPath);
+  //if (changedFiles.length > 0) {
+    //console.log(`echo "FXMANIFEST_FILE_CHANGES=${JSON.stringify(changedFiles)}" >> $GITHUB_ENV`);
+  //} else {
+    //console.log('No changes!');
+  //}
 });
