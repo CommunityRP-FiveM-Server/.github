@@ -105,14 +105,14 @@ jobs:
           else
             echo "NEW_BRANCH_NEEDED=" >> $GITHUB_ENV
           fi
-      - name: Install replacer lib
-        run: npm i replace-in-file
-        
-      - uses: actions/checkout@v2
+          
       - name: Set permissions for directories with brackets
         run: |
           find ${{ github.workspace }} -type d -name "*[*]*" -exec chmod 755 {} \;
           
+      - name: Install replacer lib
+        run: npm i replace-in-file
+         
       - name: 'Download Bump manifest version js file and run in node'
         id: replace_script
         run: |
