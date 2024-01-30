@@ -5,7 +5,8 @@ on:
     inputs:
         excludeOptions:
           type: string
-          description: Separate the files or folders that you do not want to see in the release with a comma. 
+          description: Separate the files or folders that you do not want to see in the release with a comma.
+          default: 'node_modules,package.json,package-lock.json'
           required: false
         zipName:
           type: string
@@ -153,7 +154,7 @@ jobs:
           mkdir -p ./temp/${{ inputs.zipName }}
           
           if [[ -f exclude.txt ]]; then
-            rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt --exclude=exclude.txt --exclude=.git --exclude=.github ./ ./temp/${{ inputs.zipName }}/
+            rsync -av --progress --exclude=temp/ --exclude-from=exclude.txt --exclude=exclude.txt --exclude=.git --exclude=.github  ./ ./temp/${{ inputs.zipName }}/
           elif [[ "${{ env.WEB }}" == "true" ]]; then
             rsync -av --progress --exclude=temp/ --exclude=.git --exclude=.github --include=web/dist/** --exclude=web/** ./ ./temp/${{ inputs.zipName }}/
           else
