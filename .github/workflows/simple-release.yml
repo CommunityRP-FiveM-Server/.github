@@ -108,10 +108,14 @@ jobs:
       - name: Install replacer lib
         run: npm i replace-in-file
         
+      - uses: actions/checkout@v2
+      - name: Set permissions for directories with brackets
+        run: |
+          find ${{ github.workspace }} -type d -name "*[*]*" -exec chmod 755 {} \;
+          
       - name: 'Download Bump manifest version js file and run in node'
         id: replace_script
         run: |
-          chmod -R 755 ${{ github.workspace }}
           curl -f https://raw.githubusercontent.com/CommunityRP-FiveM-Server/.github/main/.github/actions/bump-manifest-version.js | node - > set_env.sh
           bash set_env.sh
         env:
