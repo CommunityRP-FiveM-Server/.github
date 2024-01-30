@@ -18,7 +18,7 @@ const replaceInFiles = (folderPath) => {
     entries.forEach(entry => {
       const entryPath = path.join(folderPath, entry.name);
       
-      if (entry.isDirectory()) {
+      if (entry.isDirectory() || entry.name.includes('[') || entry.name.includes(']')) {
         replaceInFiles(entryPath);
       } else if (entry.isFile() && entry.name === targetFile) {
         const options = {
