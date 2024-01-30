@@ -6,7 +6,6 @@ on:
         excludeOptions:
           type: string
           description: Separate the files or folders that you do not want to see in the release with a comma.
-          default: 'node_modules,package.json,package-lock.json'
           required: false
         zipName:
           type: string
