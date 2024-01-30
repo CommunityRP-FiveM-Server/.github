@@ -18,7 +18,7 @@ const replaceInFiles = (folderPath) => {
     entries.forEach(entry => {
       const entryPath = path.join(folderPath, entry.name);
       
-      if (entry.isDirectory() || entry.name.includes('[') || entry.name.includes(']')) {
+      if (entry.isDirectory()) {
         replaceInFiles(entryPath);
       } else if (entry.isFile() && entry.name === targetFile) {
         const options = {
@@ -46,7 +46,8 @@ replaceInFiles(defaultFolderPath);
 
 process.on('exit', () => {
   const changedFiles = allResults.map(result => result.file);
-
+  console.log(changedFiles)
+  console.log(defaultFolderPath)
   if (changedFiles.length > 0) {
     console.log(`echo "FXMANIFEST_FILE_CHANGES=${JSON.stringify(changedFiles)}" >> $GITHUB_ENV`);
   } else {
